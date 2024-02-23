@@ -58,6 +58,11 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+# Install weaviate-client
+RUN pip install --quiet --no-cache-dir \
+    'weaviate-client' && \
+    fix-permissions "/home/${NB_USER}"
+
 
 USER ${NB_UID}
 
