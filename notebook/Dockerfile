@@ -53,7 +53,8 @@ RUN mamba install --yes \
 
 # Install elasticsearch-py
 RUN mamba install --yes \
-    'elasticsearch' && \
+    'elasticsearch' \
+    'elasticsearch-dsl' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
