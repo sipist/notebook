@@ -1,6 +1,6 @@
 # Copyright (c) IPRist Development Team
 # Distributed under the terms of the Modified BSD License.
-FROM quay.io/jupyter/scipy-notebook:2024-02-24
+FROM quay.io/jupyter/scipy-notebook:2024-03-18
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
 
@@ -15,6 +15,14 @@ RUN mamba install --yes \
     'sqlite' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install sqlpkg
+RUN curl -sS https://webi.sh/sqlpkg | sh && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install sqlean
+RUN "/home/${NB_USER}/.local/bin/sqlpkg" install nalgeon/sqlean && \
     fix-permissions "/home/${NB_USER}"
 
 # Install redis
@@ -33,10 +41,17 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install extras
+# Install measurement extras
+RUN mamba install --yes \
+    'jupyter-resource-usage' \
+    'jupyterlab_execute_time' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install utility extras
 RUN mamba install --yes \
     'jupyter-archive' \
-    'jupyterlab_execute_time' \
     'jupyterlab-spellchecker' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
