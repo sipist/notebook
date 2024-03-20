@@ -66,6 +66,13 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+# Install cchardet
+RUN mamba install --yes \
+    'cchardet' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
 # Install html5lib
 RUN mamba install --yes \
     'html5lib' && \
