@@ -73,6 +73,20 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+# Install langcodes
+RUN mamba install --yes \
+    'langcodes' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install dateparser
+RUN mamba install --yes \
+    'dateparser' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
 # Install html5lib
 RUN mamba install --yes \
     'html5lib' && \
@@ -83,6 +97,13 @@ RUN mamba install --yes \
 # Install lxml
 RUN mamba install --yes \
     'lxml' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install tld
+RUN mamba install --yes \
+    'tld' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
