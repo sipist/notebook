@@ -121,50 +121,30 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install cchardet
+# Install utils
 RUN mamba install --yes \
-    'cchardet' && \
+    'file' \
+    'git-delta' \
+    'git-lfs' \
+    'htop' \
+    'jc' \
+    'jq' \
+    'ncdu' \
+    'ripgrep' \
+    'rclone' \
+    'rsync' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install langcodes
+# Install special extras
 RUN mamba install --yes \
-    'langcodes' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install dateparser
-RUN mamba install --yes \
-    'dateparser' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install html5lib
-RUN mamba install --yes \
-    'html5lib' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install lxml
-RUN mamba install --yes \
-    'lxml' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install tld
-RUN mamba install --yes \
-    'tld' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install yarl
-RUN mamba install --yes \
+    'cchardet' \
+    'dateparser' \
+    'html5lib' \
+    'langcodes' \
+    'lxml' \
+    'tld' \
     'yarl' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
@@ -182,7 +162,6 @@ RUN mamba install --yes \
 RUN pip install --quiet --no-cache-dir \
     'weaviate-client' && \
     fix-permissions "/home/${NB_USER}"
-
 
 USER ${NB_UID}
 
