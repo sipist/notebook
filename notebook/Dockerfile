@@ -34,6 +34,22 @@ RUN curl -sS https://fx.wtf/install.sh | sh
 
 USER ${NB_UID}
 
+# Install PostgreSQL Python drivers
+RUN mamba install --yes \
+    'psycopg' \
+    'psycopg-c' \
+    'psycopg-pool' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install PostgreSQL extras
+RUN mamba install --yes \
+    'pgcli' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
 # Install sqlite
 RUN mamba install --yes \
     'sqlite' && \
