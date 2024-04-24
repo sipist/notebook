@@ -8,6 +8,30 @@ LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+USER root
+
+# Create the file repository configuration and Import the repository signing key
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt jammy-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    wget --no-hsts --quiet -O /etc/apt/trusted.gpg.d/pgdg.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+# Install the PostgreSQL utilities
+RUN apt-get update --yes && \
+    apt-get install --yes --no-install-recommends \
+    fd-find \
+    pspg \
+    postgresql-client-12 \
+    postgresql-client-13 \
+    postgresql-client-14 \
+    postgresql-client-15 \
+    postgresql-client-16 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Alias fd to fdfind
+RUN ln -sf /usr/bin/fdfind /usr/local/bin/fd
+
+# Install fx
+RUN curl -sS https://fx.wtf/install.sh | sh
+
 USER ${NB_UID}
 
 # Install sqlite
