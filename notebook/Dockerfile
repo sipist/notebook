@@ -1,6 +1,6 @@
 # Copyright (c) IPRist Development Team
 # Distributed under the terms of the Modified BSD License.
-FROM quay.io/jupyter/scipy-notebook:2024-04-29
+FROM quay.io/jupyter/scipy-notebook:2024-05-16
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
 
