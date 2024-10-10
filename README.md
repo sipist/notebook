@@ -1,8 +1,8 @@
 # Jupyter Notebook Information Retrieval Stack
 
-[Source on GitHub](https://github.com/iprist/notebook) | [Dockerfile commit history](https://github.com/iprist/notebook/commits/main/notebook/Dockerfile) | [Docker Hub image tags](https://hub.docker.com/r/iprist/notebook/tags/)
+[Source on GitHub](https://github.com/sipist/notebook) | [Dockerfile commit history](https://github.com/sipist/notebook/commits/main/notebook/Dockerfile) | [Docker Hub image tags](https://hub.docker.com/r/sipist/notebook/tags/)
 
-iprist/notebook includes popular packages from the scientific Python ecosystem.
+sipist/notebook includes popular packages from the scientific Python ecosystem.
 
 Everything in [jupyter/scipy-notebook](https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-scipy-notebook) and its ancestor images
 

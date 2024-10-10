@@ -1,10 +1,10 @@
-# Copyright (c) IPRist Development Team
+# Copyright (c) SIPist Development Team
 # Distributed under the terms of the Modified BSD License.
 .PHONY: docs help test
 
 # Use bash for inline if-statements in arch_patch target
 SHELL:=bash
-OWNER?=iprist
+OWNER?=sipist
 
 # Need to list the images in build dependency order
 # All of the images
@@ -21,7 +21,7 @@ export DOCKER_BUILDKIT:=1
 
 # https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help:
-	@echo "iprist/notebook"
+	@echo "sipist/notebook"
 	@echo "====================="
 	@echo "Replace % with a stack directory name (e.g., make build/notebook)"
 	@echo
@@ -69,11 +69,11 @@ hook-all: $(foreach I, $(ALL_IMAGES), hook/$(I)) ## run post-build hooks for all
 
 
 
-img-clean: img-rm-dang img-rm ## clean dangling and iprist images
-img-list: ## list iprist images
+img-clean: img-rm-dang img-rm ## clean dangling and sipist images
+img-list: ## list sipist images
 	@echo "Listing $(OWNER) images ..."
 	docker images "$(OWNER)/*"
-img-rm: ## remove iprist images
+img-rm: ## remove sipist images
 	@echo "Removing $(OWNER) images ..."
 	-docker rmi --force $(shell docker images --quiet "$(OWNER)/*") 2> /dev/null
 img-rm-dang: ## remove dangling images (tagged None)
@@ -90,12 +90,12 @@ pre-commit-install: ## set up the git hook scripts
 
 
 
-pull/%: ## pull a iprist image
+pull/%: ## pull a sipist image
 	docker pull $(OWNER)/$(notdir $@)
 pull-all: $(foreach I, $(ALL_IMAGES), pull/$(I)) ## pull all images
 
 
-push/%: ## push all tags for a iprist image
+push/%: ## push all tags for a sipist image
 	docker push --all-tags $(OWNER)/$(notdir $@)
 push-all: $(foreach I, $(ALL_IMAGES), push/$(I)) ## push all tagged images
 
