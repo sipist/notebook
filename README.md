@@ -1,4 +1,4 @@
-# Jupyter Notebook Information Retrieval Stack
+# Jupyter Notebook Intelligent Retrieval Systems Stack
 
 [Source on GitHub](https://github.com/sipist/notebook) | [Dockerfile commit history](https://github.com/sipist/notebook/commits/main/notebook/Dockerfile) | [Docker Hub image tags](https://hub.docker.com/r/sipist/notebook/tags/)
 
