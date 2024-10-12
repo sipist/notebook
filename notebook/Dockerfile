@@ -134,6 +134,7 @@ RUN mamba install --yes \
 RUN mamba install --yes \
     'cchardet' \
     'dateparser' \
+    'ftfy' \
     'html5lib' \
     'langcodes' \
     'lxml' \
