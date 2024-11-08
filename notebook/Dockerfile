@@ -1,6 +1,6 @@
 # Copyright (c) SIPist Development Team
 # Distributed under the terms of the Modified BSD License.
-FROM quay.io/jupyter/scipy-notebook:2024-11-06
+FROM quay.io/jupyter/scipy-notebook:2024-11-08
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
 
