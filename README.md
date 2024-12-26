@@ -8,7 +8,13 @@ Everything in [jupyter/scipy-notebook](https://jupyter-docker-stacks.readthedocs
 
 jupysql to run SQL in Jupyter/IPython via a %sql and %%sql magics.
 
-python-lsp-ruff a linter plugin for pylsp based on ruff.
+PostgreSQL is a relational database management system emphasizing extensibility and SQL compliance.
+
+SQLite is the most used relational database management system in the world.
+
+DuckDB is a column-oriented relational database management system.
+
+Redis is the most used NoSQL database.
 
 ## Credits
 

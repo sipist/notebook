@@ -1,8 +1,9 @@
 # Copyright (c) SIPist Development Team
 # Distributed under the terms of the Modified BSD License.
-FROM quay.io/jupyter/scipy-notebook:2024-12-09
+FROM quay.io/jupyter/scipy-notebook:2024-12-23
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
+ARG NB_BUILD=0
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
@@ -23,7 +24,8 @@ RUN apt-get update --yes && \
     postgresql-client-15 \
     postgresql-client-16 \
     postgresql-client-17 \
-    pspg && \
+    pspg \
+    pgloader && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER ${NB_UID}
