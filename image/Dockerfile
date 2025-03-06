@@ -140,4 +140,15 @@ USER ${NB_UID}
 COPY --chown=${NB_UID}:${NB_GID} ./.psqlrc ${HOME}/.psqlrc
 COPY --chown=${NB_UID}:${NB_GID} ./.sqliterc ${HOME}/.sqliterc
 
+# Install trec_eval
+RUN wget --quiet https://github.com/usnistgov/trec_eval/archive/refs/tags/v9.0.8.tar.gz && \
+    tar -xvf v9.0.8.tar.gz && \
+    rm -f v9.0.8.tar.gz
+
+WORKDIR ${HOME}/trec_eval-9.0.8
+
+RUN make && \
+    cp trec_eval "${HOME}/.local/bin/" && \
+    rm -rf "${HOME}/trec_eval-9.0.8"
+
 WORKDIR "${HOME}"
