@@ -140,15 +140,24 @@ USER ${NB_UID}
 COPY --chown=${NB_UID}:${NB_GID} ./.psqlrc ${HOME}/.psqlrc
 COPY --chown=${NB_UID}:${NB_GID} ./.sqliterc ${HOME}/.sqliterc
 
+# Add local bin to PATH
+RUN mkdir -p "${HOME}/.local/bin" && \
+    echo 'export PATH="${HOME}/.local/bin:${PATH}"' >> "${HOME}/.bashrc"
+
+WORKDIR "${HOME}/build"
+
 # Install trec_eval
 RUN wget --quiet https://github.com/usnistgov/trec_eval/archive/refs/tags/v9.0.8.tar.gz && \
+    echo "b3a61a748e747e1118c3c29b5995d3ffc286c322582d78fa1185ee7468db0953  v9.0.8.tar.gz" | sha256sum -c - && \
     tar -xvf v9.0.8.tar.gz && \
     rm -f v9.0.8.tar.gz
 
-WORKDIR ${HOME}/trec_eval-9.0.8
+WORKDIR "${HOME}/build/trec_eval-9.0.8"
 
 RUN make && \
-    cp trec_eval "${HOME}/.local/bin/" && \
-    rm -rf "${HOME}/trec_eval-9.0.8"
+    cp trec_eval "${HOME}/.local/bin/"
+
+# Remove build files
+RUN rm -rf "${HOME}/build/"
 
 WORKDIR "${HOME}"
