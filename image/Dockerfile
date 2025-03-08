@@ -147,7 +147,8 @@ RUN mkdir -p "${HOME}/.local/bin" && \
 WORKDIR "${HOME}/build"
 
 # Install trec_eval
-RUN wget --quiet -o trec_eval-9.0.8.tar.gz https://github.com/usnistgov/trec_eval/archive/refs/tags/v9.0.8.tar.gz && \
+RUN wget --quiet -O trec_eval-9.0.8.tar.gz https://github.com/usnistgov/trec_eval/archive/refs/tags/v9.0.8.tar.gz && \
+    echo "c3994a73103ec842e12df693749584a45814c35c36dcc15f38984bd463566ba1  trec_eval-9.0.8.tar.gz" | sha256sum -c - && \
     tar -xvf trec_eval-9.0.8.tar.gz && \
     rm -f trec_eval-9.0.8.tar.gz
 
