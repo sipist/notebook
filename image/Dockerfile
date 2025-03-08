@@ -135,29 +135,16 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+# Install trec_eval
+RUN mamba install --yes \
+    'trec_eval' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
 USER ${NB_UID}
 
 COPY --chown=${NB_UID}:${NB_GID} ./.psqlrc ${HOME}/.psqlrc
 COPY --chown=${NB_UID}:${NB_GID} ./.sqliterc ${HOME}/.sqliterc
-
-# Add local bin to PATH
-RUN mkdir -p "${HOME}/.local/bin" && \
-    echo 'export PATH="${HOME}/.local/bin:${PATH}"' >> "${HOME}/.bashrc"
-
-WORKDIR "${HOME}/build"
-
-# Install trec_eval
-RUN wget --quiet -O trec_eval-9.0.8.tar.gz https://github.com/usnistgov/trec_eval/archive/refs/tags/v9.0.8.tar.gz && \
-    echo "c3994a73103ec842e12df693749584a45814c35c36dcc15f38984bd463566ba1  trec_eval-9.0.8.tar.gz" | sha256sum -c - && \
-    tar -xvf trec_eval-9.0.8.tar.gz && \
-    rm -f trec_eval-9.0.8.tar.gz
-
-WORKDIR "${HOME}/build/trec_eval-9.0.8"
-
-RUN make && \
-    cp trec_eval "${HOME}/.local/bin/"
-
-# Remove build files
-RUN rm -rf "${HOME}/build/"
 
 WORKDIR "${HOME}"
