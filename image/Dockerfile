@@ -1,6 +1,6 @@
 # Copyright (c) SIPist Development Team
 # Distributed under the terms of the Modified BSD License.
-FROM quay.io/jupyter/pyspark-notebook:2025-03-31
+FROM quay.io/jupyter/pyspark-notebook:2025-06-02
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
 ARG NB_BUILD=0
@@ -30,7 +30,7 @@ RUN apt-get update --yes && \
 USER ${NB_UID}
 
 # Pin conda packages?
-RUN echo 'pandas=2.2.2' >> "${CONDA_DIR}/conda-meta/pinned"
+RUN echo 'pandas=2.2.3' >> "${CONDA_DIR}/conda-meta/pinned"
 
 # Install utils
 RUN mamba install --yes \
