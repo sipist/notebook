@@ -16,6 +16,10 @@ DuckDB is a column-oriented relational database management system.
 
 Redis is the most used NoSQL database.
 
+## Quick Start
+
+You can [try a relatively recent build of the ghcr.io/sipist/notebook image on mybinder.org](https://mybinder.org/v2/gh/sipist/notebook/main?urlpath=lab/tree/README.ipynb).
+
 ## Credits
 
 Flavio Martins
