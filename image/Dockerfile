@@ -9,28 +9,18 @@ ARG NB_BUILD=0
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-USER root
-
-# Create the file repository configuration and Import the repository signing key
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt noble-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
-    wget --no-hsts --quiet -O /etc/apt/trusted.gpg.d/pgdg.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
-
-# Install the PostgreSQL utilities
-RUN apt-get update --yes && \
-    apt-get install --yes --no-install-recommends \
-    postgresql-client-13 \
-    postgresql-client-14 \
-    postgresql-client-15 \
-    postgresql-client-16 \
-    postgresql-client-17 \
-    pspg \
-    pgloader && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
 USER ${NB_UID}
 
 # Pin conda packages?
 RUN echo 'pandas=2.2.3' >> "${CONDA_DIR}/conda-meta/pinned"
+
+# Install PostgreSQL
+RUN mamba install --yes \
+    postgresql \
+    pspg && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
 
 # Install utils
 RUN mamba install --yes \
