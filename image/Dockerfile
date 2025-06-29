@@ -11,9 +11,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER ${NB_UID}
 
-# Pin conda packages?
-RUN echo 'pandas=2.2.3' >> "${CONDA_DIR}/conda-meta/pinned"
-
 # Install PostgreSQL
 RUN mamba install --yes \
     postgresql \
