@@ -1,4 +1,4 @@
-# Copyright (c) BDist Development Team
+# Copyright (c) SIPist Development Team
 # Distributed under the terms of the Modified BSD License.
 
 # https://ghcr.io/sipist/notebook?tab=tags
