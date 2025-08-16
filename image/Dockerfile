@@ -39,7 +39,7 @@ RUN mamba install --yes \
 
 # Install special extras
 RUN mamba install --yes \
-    'cchardet' \
+    'charset-normalizer' \
     'dateparser' \
     'ftfy' \
     'html5lib' \
