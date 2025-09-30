@@ -12,7 +12,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 USER ${NB_UID}
 
 # Install PostgreSQL
-RUN mamba install --yes \
+RUN echo 'libpq=18.*' >> "${CONDA_DIR}/conda-meta/pinned" && \
+    mamba install --yes \
     postgresql \
     pspg && \
     mamba clean --all -f -y && \
