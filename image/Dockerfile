@@ -3,13 +3,21 @@
 FROM quay.io/jupyter/scipy-notebook:2026-01-12
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
-ARG NB_BUILD=2
+ARG NB_BUILD=3
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER ${NB_UID}
+
+# Try to update jupyterlab to latest version
+RUN mamba update --yes \
+    'jupyterlab' \
+    'notebook' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
 
 # Install PostgreSQL
 RUN echo 'libpq=18.*' >> "${CONDA_DIR}/conda-meta/pinned" && \
