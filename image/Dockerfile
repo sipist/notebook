@@ -1,9 +1,9 @@
 # Copyright (c) SIPist Development Team
 # Distributed under the terms of the Modified BSD License.
-FROM quay.io/jupyter/scipy-notebook:2026-01-12
+FROM quay.io/jupyter/scipy-notebook:2026-01-19
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
-ARG NB_BUILD=3
+ARG NB_BUILD=0
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
