@@ -14,8 +14,7 @@ USER ${NB_UID}
 # Install PostgreSQL
 RUN echo 'libpq=18.*' >> "${CONDA_DIR}/conda-meta/pinned" && \
     mamba install --yes \
-    postgresql \
-    pspg && \
+    postgresql && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
@@ -89,7 +88,8 @@ RUN mamba install --yes \
 
 # Install PostgreSQL extras
 RUN mamba install --yes \
-    'pgcli' && \
+    'pgcli' \
+    'pspg' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
