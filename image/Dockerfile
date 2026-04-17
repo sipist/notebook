@@ -159,6 +159,13 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+# Install Java 21
+RUN mamba install --yes \
+    'openjdk=21' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
 USER ${NB_UID}
 
 COPY --chown=${NB_UID}:${NB_GID} ./psqlrc ${HOME}/.psqlrc
