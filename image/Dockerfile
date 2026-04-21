@@ -160,7 +160,8 @@ RUN mamba install --yes \
     fix-permissions "/home/${NB_USER}"
 
 # Install Java 21
-RUN mamba install --yes \
+RUN echo 'openjdk=21' >> "${CONDA_DIR}/conda-meta/pinned" && \
+    mamba install --yes \
     'openjdk=21' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
