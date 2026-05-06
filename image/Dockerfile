@@ -29,6 +29,7 @@ RUN mamba install --yes \
     'htop' \
     'jc' \
     'jq' \
+    'lftp' \
     'ncdu' \
     'ripgrep' \
     'rclone' \
