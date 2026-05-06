@@ -9,6 +9,15 @@ ARG NB_BUILD=1
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+USER root
+
+RUN apt-get update --yes && \
+    apt-get install --yes --no-install-recommends \
+    dnsutils \
+    iputils-ping \
+    netcat-openbsd && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 USER ${NB_UID}
 
 # Install PostgreSQL
@@ -21,6 +30,7 @@ RUN echo 'libpq=18.*' >> "${CONDA_DIR}/conda-meta/pinned" && \
 
 # Install utils
 RUN mamba install --yes \
+    '7zip' \
     'bat' \
     'fd-find' \
     'file' \
@@ -33,7 +43,9 @@ RUN mamba install --yes \
     'ncdu' \
     'ripgrep' \
     'rclone' \
-    'rsync' && \
+    'rsync' \
+    'zip' \
+    'zstd' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
