@@ -23,7 +23,7 @@ RUN apt-get update --yes && \
 USER ${NB_UID}
 
 # Install PostgreSQL
-RUN echo 'libpq=18.*' >> "${CONDA_DIR}/conda-meta/pinned" && \
+RUN echo "libpq=${LIBPQ_PIN}" >> "${CONDA_DIR}/conda-meta/pinned" && \
     mamba install --yes \
     postgresql && \
     mamba clean --all -f -y && \
@@ -67,7 +67,7 @@ RUN mamba install --yes \
     fix-permissions "/home/${NB_USER}"
 
 # Install redis
-RUN echo 'redis-server=7.2.*' >> "${CONDA_DIR}/conda-meta/pinned" && \
+RUN echo "redis-server=${REDIS_SERVER_PIN}" >> "${CONDA_DIR}/conda-meta/pinned" && \
     mamba install --yes \
     'redis-server' \
     'redis-py' && \
@@ -117,32 +117,6 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install JupySQL
-RUN mamba install --yes \
-    'jupysql' \
-    'jupysql-plugin' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install nodejs
-RUN mamba install --yes \
-    'nodejs' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install JupySQL (customized)
-RUN pip install --no-cache-dir \
-    'git+https://github.com/bdist/jupysql.git' \
-    'git+https://github.com/bdist/jupysql-plugin.git' && \
-    rm -rf "${HOME}/.cache/pip" && \
-    rm -rf "${HOME}/.npm" && \
-    rm -rf "${HOME}/.yarn" && \
-    rm -rf /tmp/node-compile-cache* && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
 # Install utility extras
 RUN mamba install --yes \
     'jupyterlab_execute_time' \
@@ -159,11 +133,21 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install elasticsearch-py
+# Install nodejs (for JupySQL build below)
 RUN mamba install --yes \
-    'elasticsearch' \
-    'elasticsearch-dsl' && \
+    'nodejs' && \
     mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install JupySQL (customized)
+RUN pip install --no-cache-dir \
+    'git+https://github.com/bdist/jupysql.git' \
+    'git+https://github.com/bdist/jupysql-plugin.git' && \
+    rm -rf "${HOME}/.cache/pip" && \
+    rm -rf "${HOME}/.npm" && \
+    rm -rf "${HOME}/.yarn" && \
+    rm -rf /tmp/node-compile-cache* && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
