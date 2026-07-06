@@ -4,7 +4,8 @@
 # https://quay.io/repository/sipist/notebook?tab=tags
 ARG REGISTRY=quay.io
 ARG OWNER=sipist
-ARG BASE_IMAGE=$REGISTRY/$OWNER/notebook:latest
+ARG TAG=latest
+ARG BASE_IMAGE=$REGISTRY/$OWNER/notebook:$TAG
 FROM $BASE_IMAGE
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
@@ -18,3 +19,33 @@ ENV TAG="latest"
 COPY --chown=${NB_UID}:${NB_GID} binder/README.ipynb "${HOME}"/README.ipynb
 
 RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+# switch to notebook user
+USER ${NB_UID}
+
+# PostgreSQL environment
+ENV PGHOST=localhost \
+    PGPORT=5432 \
+    PGUSER=postgres \
+    PGDATABASE=postgres \
+    PGDATA="${HOME}/data/pgsql"
+
+# create and own the data directory
+RUN mkdir -p "$PGDATA" \
+    && chown -R "${NB_UID}:${NB_GID}" "$PGDATA"
+
+# initialize the database with password authentication
+RUN initdb \
+    --username="$PGUSER" \
+    --pwfile=<(printf "%s\n" "postgres") \
+    --encoding=UTF8 \
+    --locale=C \
+    --auth-local=md5 \
+    --auth-host=md5
+
+# apply custom PostgreSQL settings
+COPY --chown=${NB_UID}:${NB_GID} binder/postgresql.conf "$PGDATA"/postgresql.conf
+
+# create scripts for PostgreSQL
+COPY --chown=${NB_UID}:${NB_GID} binder/start-postgresql.sh "${HOME}"/start-postgresql.sh
+COPY --chown=${NB_UID}:${NB_GID} binder/stop-postgresql.sh "${HOME}"/stop-postgresql.sh
