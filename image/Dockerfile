@@ -7,6 +7,7 @@ ARG NB_BUILD=0
 ARG LIBPQ_PIN='18.*'
 ARG REDIS_SERVER_PIN='8.10.*'
 ARG NODEJS_PIN='24.*'
+ARG OPENJDK_PIN='25.*'
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
@@ -160,8 +161,8 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install Java 21
-RUN echo 'openjdk=21' >> "${CONDA_DIR}/conda-meta/pinned" && \
+# Install Java
+RUN echo "openjdk=${OPENJDK_PIN}" >> "${CONDA_DIR}/conda-meta/pinned" && \
     mamba install --yes \
     'openjdk' && \
     mamba clean --all -f -y && \
