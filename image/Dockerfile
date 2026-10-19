@@ -1,10 +1,10 @@
 # Copyright (c) SIPist Development Team
 # Distributed under the terms of the Modified BSD License.
-FROM quay.io/jupyter/scipy-notebook:2026-10-18
+FROM quay.io/jupyter/scipy-notebook:2026-10-19
 
 LABEL maintainer="Flavio Martins <flavio.f.martins@tecnico.ulisboa.pt>"
 ARG NB_BUILD=0
-ARG LIBPQ_PIN='18.*'
+ARG LIBPQ_PIN='19.*'
 ARG REDIS_SERVER_PIN='8.*'
 ARG NODEJS_PIN='24.*'
 ARG OPENJDK_PIN='25.*'
@@ -19,7 +19,9 @@ RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
     dnsutils \
     iputils-ping \
-    netcat-openbsd && \
+    netcat-openbsd \
+    # for PostgreSQL migrations
+    pgloader && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER ${NB_UID}
@@ -27,7 +29,58 @@ USER ${NB_UID}
 # Install PostgreSQL
 RUN echo "libpq=${LIBPQ_PIN}" >> "${CONDA_DIR}/conda-meta/pinned" && \
     mamba install --yes \
+    -c conda-forge/label/postgresql_rc \
+    -c conda-forge \
     postgresql && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install PostgreSQL Python drivers
+RUN pip install --no-cache-dir \
+    'psycopg[c]' && \
+    rm -rf "${HOME}/.cache/pip" && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install PostgreSQL extras
+RUN pip install --no-cache-dir \
+    'pgcli' && \
+    rm -rf "${HOME}/.cache/pip" && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install sqlite
+RUN mamba install --yes \
+    'dbhash' \
+    'sqlite' \
+    'sqldiff' \
+    'sqlite_rsync' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install redis
+RUN echo "redis-server=${REDIS_SERVER_PIN}" >> "${CONDA_DIR}/conda-meta/pinned" && \
+    mamba install --yes \
+    'redis-server' \
+    'redis-py' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install PyDuckDB and SQLalchemy driver
+RUN mamba install --yes \
+    'duckdb-engine' \
+    'python-duckdb' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+# Install DuckDB CLI and HTTPFS extension
+RUN mamba install --yes \
+    'duckdb-cli' \
+    'duckdb-extension-httpfs' && \
     mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
@@ -68,57 +121,6 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install redis
-RUN echo "redis-server=${REDIS_SERVER_PIN}" >> "${CONDA_DIR}/conda-meta/pinned" && \
-    mamba install --yes \
-    'redis-server' \
-    'redis-py' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install DuckDB CLI and HTTPFS extension
-RUN mamba install --yes \
-    'duckdb-cli' \
-    'duckdb-extension-httpfs' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install sqlite
-RUN mamba install --yes \
-    'dbhash' \
-    'sqlite' \
-    'sqldiff' \
-    'sqlite_rsync' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install PostgreSQL Python drivers
-RUN mamba install --yes \
-    'psycopg' \
-    'psycopg-c' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install PostgreSQL extras
-RUN mamba install --yes \
-    'pgcli' \
-    'pspg' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install PyDuckDB and SQLalchemy driver
-RUN mamba install --yes \
-    'duckdb-engine' \
-    'python-duckdb' && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
 # Install utility extras
 RUN mamba install --yes \
     'jupyter-archive' \
@@ -154,7 +156,7 @@ RUN pip install --no-cache-dir \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install trec_eval
+    # Install trec_eval
 RUN mamba install --yes \
     'trec_eval' && \
     mamba clean --all -f -y && \
