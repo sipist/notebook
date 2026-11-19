@@ -106,6 +106,14 @@ RUN mamba install --yes \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+# Install ffmpeg and yt-dlp
+RUN mamba install --yes \
+    'ffmpeg' \
+    'yt-dlp' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
 # Install special extras
 RUN mamba install --yes \
     'charset-normalizer' \
